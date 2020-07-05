@@ -23,4 +23,4 @@ stages:
 - template: templates/build-dotnet.yml@templates
   parameters:
     pack: true
-    filesToPack: '**/AWSS3Helper.csproj'
+    filesToPack: '**/HttpHelper.csproj'
