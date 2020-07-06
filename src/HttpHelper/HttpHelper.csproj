@@ -8,6 +8,8 @@
     <PackageProjectUrl>https://github.com/kbrashears5/net-standard-http-helper</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kbrashears5/net-standard-http-helper</RepositoryUrl>
     <Description>Collection of helper functions for interacting with HTTP calls</Description>
+    <PackageId>NetStandardHttpHelper</PackageId>
+    <RepositoryType>github</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
