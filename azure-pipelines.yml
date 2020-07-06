@@ -20,7 +20,8 @@ trigger:
 
 # build solution and create nuget package
 stages:
-- template: templates/build-dotnet.yml@templates
+- template: templates/build-dotnet-core.yml@templates
   parameters:
     pack: true
     filesToPack: '**/HttpHelper.csproj'
+    testProjects: '**/HttpHelper.Test.csproj'
