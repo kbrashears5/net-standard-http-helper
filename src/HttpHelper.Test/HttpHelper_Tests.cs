@@ -263,6 +263,32 @@ namespace HttpHelper.Test
                 "body");
         }
 
+        /// <summary>
+        /// Test that function throws on null url
+        /// </summary>
+        [Fact]
+        public async void PostAsync_Form_Null_Url()
+        {
+            var ex = await Assert.ThrowsAsync<ArgumentNullException>(() => TestValues.HttpHelper.PostAsync(url: NetStandardTestHelper.TestValues.StringEmpty,
+                form: TestValues.Form));
+
+            TestHelper.AssertArgumentNullException(ex,
+                "url");
+        }
+
+        /// <summary>
+        /// Test that function throws on null body
+        /// </summary>
+        [Fact]
+        public async void PostAsync_Form_Null_Body()
+        {
+            var ex = await Assert.ThrowsAsync<ArgumentNullException>(() => TestValues.HttpHelper.PostAsync(url: TestValues.Url,
+                form: null));
+
+            TestHelper.AssertArgumentNullException(ex,
+                "content");
+        }
+
         #endregion PostAsync
 
         #region PutAsync

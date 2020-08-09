@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using HttpHelper.Auth;
 
@@ -67,6 +65,14 @@ namespace HttpHelper
         public async Task<HttpResponseMessage> PostAsync(string url,
             string body,
             ContentType contentType = ContentType.None,
+            Dictionary<string, string> headers = null,
+            bool throwOnBadStatus = false)
+        {
+            return await this.ResponseMessage();
+        }
+
+        public async Task<HttpResponseMessage> PostAsync(string url,
+            FormUrlEncodedContent form,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false)
         {

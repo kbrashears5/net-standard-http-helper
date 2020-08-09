@@ -224,16 +224,73 @@ namespace HttpHelper
                 { Text.ClientSecret, clientSecret},
             };
 
-            var jsonStringBody = JsonConvert.SerializeObject(value: jsonBody);
+            var form = new FormUrlEncodedContent(nameValueCollection: jsonBody);
 
             var response = await this.PostAsync(url: authUrl,
-                body: jsonStringBody,
-                contentType: ContentType.FormUrlEncoded,
+                form: form,
                 throwOnBadStatus: true);
 
             var clientCredentials = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<ClientCredentials>(clientCredentials);
+        }
+
+        /// <summary>
+        /// Invoke <see cref="HttpMethod"/> async for string or json body
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="httpMethod"></param>
+        /// <param name="body"></param>
+        /// <param name="contentType"></param>
+        /// <param name="headers"></param>
+        /// <param name="throwOnBadStatus"></param>
+        /// <returns></returns>
+        private async Task<HttpResponseMessage> InvokeAsync(string url,
+            HttpMethod httpMethod,
+            string body,
+            ContentType contentType,
+            Dictionary<string, string> headers,
+            bool throwOnBadStatus)
+        {
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
+            if (httpMethod != HttpMethod.Get && string.IsNullOrWhiteSpace(body)) throw new ArgumentNullException(nameof(body));
+
+            var content = new StringContent(content: body,
+                encoding: Encoding.UTF8,
+                mediaType: contentType.ToAttributeString());
+
+            return await this.SendAsync(httpMethod: httpMethod,
+                url: url,
+                content: content,
+                headers: headers,
+                throwOnBadStatus: throwOnBadStatus);
+        }
+
+        /// <summary>
+        /// Invoke <see cref="HttpMethod"/> async for form body
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="httpMethod"></param>
+        /// <param name="content"></param>
+        /// <param name="headers"></param>
+        /// <param name="throwOnBadStatus"></param>
+        /// <returns></returns>
+        private async Task<HttpResponseMessage> InvokeAsync(string url,
+            HttpMethod httpMethod,
+            FormUrlEncodedContent content,
+            Dictionary<string, string> headers,
+            bool throwOnBadStatus)
+        {
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
+            if (content == null) throw new ArgumentNullException(nameof(content));
+
+            return await this.SendAsync(httpMethod: httpMethod,
+                url: url,
+                content: content,
+                headers: headers,
+                throwOnBadStatus: throwOnBadStatus);
         }
 
         public async Task<HttpResponseMessage> PatchAsync(string url,
@@ -264,6 +321,18 @@ namespace HttpHelper
                 throwOnBadStatus: throwOnBadStatus);
         }
 
+        public async Task<HttpResponseMessage> PostAsync(string url,
+            FormUrlEncodedContent form,
+            Dictionary<string, string> headers = null,
+            bool throwOnBadStatus = false)
+        {
+            return await this.InvokeAsync(url: url,
+                httpMethod: HttpMethod.Post,
+                content: form,
+                headers: headers,
+                throwOnBadStatus: throwOnBadStatus);
+        }
+
         public async Task<HttpResponseMessage> PutAsync(string url,
             string body,
             ContentType contentType = ContentType.None,
@@ -279,33 +348,27 @@ namespace HttpHelper
         }
 
         /// <summary>
-        /// Invoke <see cref="HttpMethod"/>, async
+        /// Send the Http command
         /// </summary>
-        /// <param name="url"></param>
         /// <param name="httpMethod"></param>
-        /// <param name="body"></param>
-        /// <param name="contentType"></param>
+        /// <param name="url"></param>
+        /// <param name="content"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
         /// <returns></returns>
-        private async Task<HttpResponseMessage> InvokeAsync(string url,
-            HttpMethod httpMethod,
-            string body,
-            ContentType contentType,
-            Dictionary<string, string> headers,
-            bool throwOnBadStatus)
+        private async Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod,
+            string url,
+            HttpContent content,
+            Dictionary<string, string> headers = null,
+            bool throwOnBadStatus = false)
         {
-            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
             if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
-            if (httpMethod != HttpMethod.Get && string.IsNullOrWhiteSpace(body)) throw new ArgumentNullException(nameof(body));
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            if (content == null) throw new ArgumentNullException(nameof(content));
 
             this.Logger.LogTrace(message: Text.Url(url));
 
             var uri = new Uri(uriString: url);
-
-            var content = new StringContent(content: body,
-                encoding: Encoding.UTF8,
-                mediaType: contentType.ToAttributeString());
 
             var request = new HttpRequestMessage()
             {

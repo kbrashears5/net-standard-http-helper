@@ -78,6 +78,19 @@ namespace HttpHelper
             bool throwOnBadStatus = false);
 
         /// <summary>
+        /// <see cref="HttpMethod.Post"/> verb
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="form"></param>
+        /// <param name="headers"></param>
+        /// <param name="throwOnBadStatus"></param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> PostAsync(string url,
+            FormUrlEncodedContent form,
+            Dictionary<string, string> headers = null,
+            bool throwOnBadStatus = false);
+
+        /// <summary>
         /// <see cref="HttpMethod.Put"/> verb
         /// </summary>
         /// <param name="url"></param>

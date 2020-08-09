@@ -1,4 +1,6 @@
 ﻿using Logger;
+using System.Collections.Generic;
+using System.Net.Http;
 
 namespace HttpHelper.Test
 {
@@ -32,5 +34,11 @@ namespace HttpHelper.Test
         internal static string Body { get; } = nameof(Body);
 
         internal static string Url { get; } = "https://url.com";
+
+        internal static KeyValuePair<string, string> KeyValuePair { get; } = new KeyValuePair<string, string>();
+
+        internal static IEnumerable<KeyValuePair<string, string>> KeyValuePairs { get; } = new List<KeyValuePair<string, string>>() { KeyValuePair };
+
+        internal static FormUrlEncodedContent Form { get; } = new FormUrlEncodedContent(nameValueCollection: KeyValuePairs);
     }
 }
