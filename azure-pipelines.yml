@@ -16,7 +16,17 @@ trigger:
     - master
   paths:
     include:
-    - src/*
+    - src/HttpHelper/*
+
+# define pull request triggers (https://docs.microsoft.com/en-us/azure/devops/pipelines/repos/github?view=azure-devops&tabs=yaml#pr-triggers)
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - src/HttpHelper/*
 
 # build solution and create nuget package
 stages:
