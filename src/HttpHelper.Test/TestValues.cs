@@ -10,7 +10,7 @@ namespace HttpHelper.Test
 
         internal static string Password { get; } = nameof(Password);
 
-        internal static LogLevel LogLevel { get; } = LogLevel.Information;
+        internal static LogLevel LogLevel { get; } = LogLevel.Off;
 
         internal static string LogName { get; } = nameof(LogName);
 
