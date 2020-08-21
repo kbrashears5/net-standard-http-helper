@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,6 +22,46 @@ namespace HttpHelper
         {
             this.ReturnSuccessStatusCode = returnSuccessStatusCode;
         }
+
+        #region IDisposable
+
+        /// <summary>
+        /// Disposed
+        /// </summary>
+        private bool Disposed { get; set; } = false;
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.Disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                this.Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Finalizer
+        /// </summary>
+        ~HttpHelper_Mock() => this.Dispose(disposing: false);
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(disposing: true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion IDisposable
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 

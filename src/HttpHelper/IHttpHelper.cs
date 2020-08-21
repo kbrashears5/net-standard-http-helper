@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HttpHelper.Auth;
@@ -8,7 +9,7 @@ namespace HttpHelper
     /// <summary>
     /// Functions to interact with HTTP Clients
     /// </summary>
-    public interface IHttpHelper
+    public interface IHttpHelper : IDisposable
     {
         /// <summary>
         /// <see cref="HttpMethod.Delete"/> verb

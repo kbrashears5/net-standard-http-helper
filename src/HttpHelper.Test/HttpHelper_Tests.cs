@@ -127,6 +127,21 @@ namespace HttpHelper.Test
 
         #endregion Constructor
 
+        #region IDisposable
+
+        /// <summary>
+        /// Test that <see cref="IDisposable"/> disposes correctly
+        /// </summary>
+        [Fact]
+        public void IDisposable()
+        {
+            var helper = new HttpHelper(logger: TestValues.Logger_Mock);
+
+            helper.Dispose();
+        }
+
+        #endregion IDisposable
+
         #region DeleteAsync
 
         /// <summary>
