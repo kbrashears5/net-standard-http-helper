@@ -10,6 +10,7 @@
     <Description>Collection of helper functions for interacting with HTTP calls</Description>
     <PackageId>NetStandardHttpHelper</PackageId>
     <RepositoryType>github</RepositoryType>
+    <PackageTags>http;helper;rest;test;mock;post;get;put;patch;delete</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NetStandardLogger" Version="2.0.3" />
+    <PackageReference Include="NetStandardLogger" Version="2.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
