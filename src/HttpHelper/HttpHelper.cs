@@ -8,6 +8,7 @@ using System.Timers;
 using Logger;
 using HttpHelper.Auth;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace HttpHelper
 {
@@ -29,7 +30,12 @@ namespace HttpHelper
         /// <summary>
         /// Timer for auth tokens
         /// </summary>
-        private Timer Timer { get; set; }
+        private System.Timers.Timer Timer { get; set; }
+
+        /// <summary>
+        /// Cancellation Token
+        /// </summary>
+        private CancellationTokenSource CancellationToken { get; }
 
         /// <summary>
         /// Create new instance of <see cref="HttpHelper"/>
@@ -84,6 +90,8 @@ namespace HttpHelper
             if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));
             if (string.IsNullOrWhiteSpace(authUrl)) throw new ArgumentNullException(nameof(authUrl));
 
+            this.CancellationToken = new CancellationTokenSource();
+
             this.InitializeClient();
 
             this.InitializeOAuth2ClientCredentials(sender: null,
@@ -110,6 +118,16 @@ namespace HttpHelper
             {
                 if (disposing)
                 {
+                    try
+                    {
+                        this.CancellationToken?.Cancel();
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                    }
+
+                    this.CancellationToken?.Dispose();
+
                     this.Timer?.Dispose();
 
                     this.HttpClient?.Dispose();
@@ -171,7 +189,7 @@ namespace HttpHelper
                 parameter: clientCredentials.Access_Token);
 
             // start timer to get new token 30 seconds before expiration
-            this.Timer = new Timer(interval: (clientCredentials.Expires_In - 30) * 1000);
+            this.Timer = new System.Timers.Timer(interval: (clientCredentials.Expires_In - 30) * 1000);
 
             this.Timer.Elapsed += async (s, e) => await this.InitializeOAuth2ClientCredentials(sender: sender,
                 eventArgs: eventArgs,
@@ -187,32 +205,37 @@ namespace HttpHelper
         public async Task<HttpResponseMessage> DeleteAsync(string url,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Delete,
                 body: string.Empty,
                 contentType: contentType,
                 headers: headers,
-                throwOnBadStatus: throwOnBadStatus);
+                throwOnBadStatus: throwOnBadStatus,
+                cancellationToken: cancellationToken);
         }
 
         public async Task<HttpResponseMessage> GetAsync(string url,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Get,
                 body: string.Empty,
                 contentType: contentType,
                 headers: headers,
-                throwOnBadStatus: throwOnBadStatus);
+                throwOnBadStatus: throwOnBadStatus,
+                cancellationToken: cancellationToken);
         }
 
         public async Task<ClientCredentials> GetOAuth2ClientCredentialsAsync(string clientId,
             string clientSecret,
-            string authUrl)
+            string authUrl,
+            CancellationTokenSource cancellationToken = null)
         {
             if (string.IsNullOrWhiteSpace(clientId)) throw new ArgumentNullException(nameof(clientId));
             if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));
@@ -229,7 +252,8 @@ namespace HttpHelper
 
             var response = await this.PostAsync(url: authUrl,
                 form: form,
-                throwOnBadStatus: true);
+                throwOnBadStatus: true,
+                cancellationToken: cancellationToken);
 
             var clientCredentials = await response.Content.ReadAsStringAsync();
 
@@ -245,13 +269,15 @@ namespace HttpHelper
         /// <param name="contentType"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         private async Task<HttpResponseMessage> InvokeAsync(string url,
             HttpMethod httpMethod,
             string body,
             ContentType contentType,
             Dictionary<string, string> headers,
-            bool throwOnBadStatus)
+            bool throwOnBadStatus,
+            CancellationTokenSource cancellationToken = null)
         {
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
             if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
@@ -265,7 +291,8 @@ namespace HttpHelper
                 url: url,
                 content: content,
                 headers: headers,
-                throwOnBadStatus: throwOnBadStatus);
+                throwOnBadStatus: throwOnBadStatus,
+                cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -276,12 +303,14 @@ namespace HttpHelper
         /// <param name="content"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         private async Task<HttpResponseMessage> InvokeAsync(string url,
             HttpMethod httpMethod,
             FormUrlEncodedContent content,
             Dictionary<string, string> headers,
-            bool throwOnBadStatus)
+            bool throwOnBadStatus,
+            CancellationTokenSource cancellationToken = null)
         {
 #pragma warning disable IDE0046 // Convert to conditional expression
 
@@ -293,7 +322,8 @@ namespace HttpHelper
                 url: url,
                 content: content,
                 headers: headers,
-                throwOnBadStatus: throwOnBadStatus);
+                throwOnBadStatus: throwOnBadStatus,
+                cancellationToken: cancellationToken);
 
 #pragma warning restore IDE0046 // Convert to conditional expression
         }
@@ -302,54 +332,62 @@ namespace HttpHelper
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.InvokeAsync(url: url,
                  httpMethod: new HttpMethod(method: Text.Patch),
                  body: body,
                  contentType: contentType,
                  headers: headers,
-                 throwOnBadStatus: throwOnBadStatus);
+                 throwOnBadStatus: throwOnBadStatus,
+                 cancellationToken: cancellationToken);
         }
 
         public async Task<HttpResponseMessage> PostAsync(string url,
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Post,
                 body: body,
                 contentType: contentType,
                 headers: headers,
-                throwOnBadStatus: throwOnBadStatus);
+                throwOnBadStatus: throwOnBadStatus,
+                cancellationToken: cancellationToken);
         }
 
         public async Task<HttpResponseMessage> PostAsync(string url,
             FormUrlEncodedContent form,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Post,
                 content: form,
                 headers: headers,
-                throwOnBadStatus: throwOnBadStatus);
+                throwOnBadStatus: throwOnBadStatus,
+                cancellationToken: cancellationToken);
         }
 
         public async Task<HttpResponseMessage> PutAsync(string url,
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Put,
                 body: body,
                 contentType: contentType,
                 headers: headers,
-                throwOnBadStatus: throwOnBadStatus);
+                throwOnBadStatus: throwOnBadStatus,
+                cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -360,12 +398,14 @@ namespace HttpHelper
         /// <param name="content"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         private async Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod,
             string url,
             HttpContent content,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
@@ -393,7 +433,8 @@ namespace HttpHelper
 
             this.Logger.LogTrace(message: Text.Request(request));
 
-            var response = await this.HttpClient.SendAsync(request: request);
+            var response = await this.HttpClient.SendAsync(request: request,
+                cancellationToken: cancellationToken == null ? this.CancellationToken.Token : cancellationToken.Token);
             this.Logger.LogTrace(message: Text.Response(response));
 
             return throwOnBadStatus && !response.IsSuccessStatusCode

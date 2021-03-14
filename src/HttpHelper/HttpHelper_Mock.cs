@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using HttpHelper.Auth;
 
@@ -68,7 +69,8 @@ namespace HttpHelper
         public async Task<HttpResponseMessage> DeleteAsync(string url,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.ResponseMessage();
         }
@@ -76,14 +78,16 @@ namespace HttpHelper
         public async Task<HttpResponseMessage> GetAsync(string url,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.ResponseMessage();
         }
 
         public async Task<ClientCredentials> GetOAuth2ClientCredentialsAsync(string clientId,
             string clientSecret,
-            string authUrl)
+            string authUrl,
+            CancellationTokenSource cancellationToken = null)
         {
             var clientCredentials = new ClientCredentials()
             {
@@ -98,7 +102,8 @@ namespace HttpHelper
         public async Task<HttpResponseMessage> PatchAsync(string url, string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.ResponseMessage();
         }
@@ -107,7 +112,8 @@ namespace HttpHelper
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.ResponseMessage();
         }
@@ -115,7 +121,8 @@ namespace HttpHelper
         public async Task<HttpResponseMessage> PostAsync(string url,
             FormUrlEncodedContent form,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.ResponseMessage();
         }
@@ -124,7 +131,8 @@ namespace HttpHelper
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false)
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null)
         {
             return await this.ResponseMessage();
         }

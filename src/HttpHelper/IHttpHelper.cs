@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using HttpHelper.Auth;
 
@@ -18,11 +19,13 @@ namespace HttpHelper
         /// <param name="contentType"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> DeleteAsync(string url,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false);
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null);
 
         /// <summary>
         /// <see cref="HttpMethod.Get"/> verb
@@ -31,11 +34,13 @@ namespace HttpHelper
         /// <param name="contentType"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> GetAsync(string url,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false);
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null);
 
         /// <summary>
         /// Get OAuth2.0 Client Credentials token
@@ -43,10 +48,12 @@ namespace HttpHelper
         /// <param name="clientId"></param>
         /// <param name="clientSecret"></param>
         /// <param name="authUrl"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<ClientCredentials> GetOAuth2ClientCredentialsAsync(string clientId,
             string clientSecret,
-            string authUrl);
+            string authUrl,
+            CancellationTokenSource cancellationToken = null);
 
         /// <summary>
         /// HttpMethod.Patch verb
@@ -56,12 +63,14 @@ namespace HttpHelper
         /// <param name="contentType"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> PatchAsync(string url,
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false);
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null);
 
         /// <summary>
         /// <see cref="HttpMethod.Post"/> verb
@@ -71,12 +80,14 @@ namespace HttpHelper
         /// <param name="contentType"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> PostAsync(string url,
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false);
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null);
 
         /// <summary>
         /// <see cref="HttpMethod.Post"/> verb
@@ -85,11 +96,13 @@ namespace HttpHelper
         /// <param name="form"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> PostAsync(string url,
             FormUrlEncodedContent form,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false);
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null);
 
         /// <summary>
         /// <see cref="HttpMethod.Put"/> verb
@@ -99,11 +112,13 @@ namespace HttpHelper
         /// <param name="contentType"></param>
         /// <param name="headers"></param>
         /// <param name="throwOnBadStatus"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> PutAsync(string url,
             string body,
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
-            bool throwOnBadStatus = false);
+            bool throwOnBadStatus = false,
+            CancellationTokenSource cancellationToken = null);
     }
 }
