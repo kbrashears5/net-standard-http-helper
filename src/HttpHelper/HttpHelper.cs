@@ -283,6 +283,8 @@ namespace HttpHelper
             Dictionary<string, string> headers,
             bool throwOnBadStatus)
         {
+#pragma warning disable IDE0046 // Convert to conditional expression
+
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
             if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
             if (content == null) throw new ArgumentNullException(nameof(content));
@@ -292,6 +294,8 @@ namespace HttpHelper
                 content: content,
                 headers: headers,
                 throwOnBadStatus: throwOnBadStatus);
+
+#pragma warning restore IDE0046 // Convert to conditional expression
         }
 
         public async Task<HttpResponseMessage> PatchAsync(string url,
@@ -392,10 +396,9 @@ namespace HttpHelper
             var response = await this.HttpClient.SendAsync(request: request);
             this.Logger.LogTrace(message: Text.Response(response));
 
-            if (throwOnBadStatus && !response.IsSuccessStatusCode)
-                throw new HttpRequestException(Text.BadStatusCode(response.StatusCode));
-
-            return response;
+            return throwOnBadStatus && !response.IsSuccessStatusCode
+                ? throw new HttpRequestException(Text.BadStatusCode(response.StatusCode))
+                : response;
         }
 
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using Newtonsoft.Json;
 
 namespace HttpHelper
@@ -38,31 +35,13 @@ namespace HttpHelper
 
         #region LOGGING
 
-        internal static string Url(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+        internal static string Url(string url) => $"URL: {url}";
 
-            return $"URL: {url}";
-        }
+        internal static string Request(object request) => $"Request: {JsonConvert.SerializeObject(value: request)}";
 
-        internal static string Request(object request)
-        {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+        internal static string Response(object response) => $"Response: {JsonConvert.SerializeObject(value: response)}";
 
-            return $"Request: {JsonConvert.SerializeObject(value: request)}";
-        }
-
-        internal static string Response(object response)
-        {
-            if (response == null) throw new ArgumentNullException(nameof(response));
-
-            return $"Response: {JsonConvert.SerializeObject(value: response)}";
-        }
-
-        internal static string BadStatusCode(HttpStatusCode statusCode)
-        {
-            return $"Endpoint returned bad status: {statusCode}";
-        }
+        internal static string BadStatusCode(HttpStatusCode statusCode) => $"Endpoint returned bad status: {statusCode}";
 
         #endregion LOGGING
 
