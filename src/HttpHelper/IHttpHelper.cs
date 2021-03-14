@@ -25,7 +25,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null);
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <see cref="HttpMethod.Get"/> verb
@@ -40,7 +40,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null);
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get OAuth2.0 Client Credentials token
@@ -53,7 +53,7 @@ namespace HttpHelper
         Task<ClientCredentials> GetOAuth2ClientCredentialsAsync(string clientId,
             string clientSecret,
             string authUrl,
-            CancellationTokenSource cancellationToken = null);
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// HttpMethod.Patch verb
@@ -70,7 +70,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null);
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <see cref="HttpMethod.Post"/> verb
@@ -87,7 +87,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null);
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <see cref="HttpMethod.Post"/> verb
@@ -102,7 +102,7 @@ namespace HttpHelper
             FormUrlEncodedContent form,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null);
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <see cref="HttpMethod.Put"/> verb
@@ -119,6 +119,6 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null);
+            CancellationToken cancellationToken = default);
     }
 }

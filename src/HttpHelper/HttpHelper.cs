@@ -206,7 +206,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Delete,
@@ -221,7 +221,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Get,
@@ -235,7 +235,7 @@ namespace HttpHelper
         public async Task<ClientCredentials> GetOAuth2ClientCredentialsAsync(string clientId,
             string clientSecret,
             string authUrl,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(clientId)) throw new ArgumentNullException(nameof(clientId));
             if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));
@@ -277,7 +277,7 @@ namespace HttpHelper
             ContentType contentType,
             Dictionary<string, string> headers,
             bool throwOnBadStatus,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
             if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
@@ -310,7 +310,7 @@ namespace HttpHelper
             FormUrlEncodedContent content,
             Dictionary<string, string> headers,
             bool throwOnBadStatus,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
 #pragma warning disable IDE0046 // Convert to conditional expression
 
@@ -333,7 +333,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.InvokeAsync(url: url,
                  httpMethod: new HttpMethod(method: Text.Patch),
@@ -349,7 +349,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Post,
@@ -364,7 +364,7 @@ namespace HttpHelper
             FormUrlEncodedContent form,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Post,
@@ -379,7 +379,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.InvokeAsync(url: url,
                 httpMethod: HttpMethod.Put,
@@ -405,7 +405,7 @@ namespace HttpHelper
             HttpContent content,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             if (httpMethod == null) throw new ArgumentNullException(nameof(httpMethod));
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
@@ -434,7 +434,7 @@ namespace HttpHelper
             this.Logger.LogTrace(message: Text.Request(request));
 
             var response = await this.HttpClient.SendAsync(request: request,
-                cancellationToken: cancellationToken == null ? this.CancellationToken.Token : cancellationToken.Token);
+                cancellationToken: cancellationToken == default ? this.CancellationToken.Token : cancellationToken);
             this.Logger.LogTrace(message: Text.Response(response));
 
             return throwOnBadStatus && !response.IsSuccessStatusCode

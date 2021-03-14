@@ -70,7 +70,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.ResponseMessage();
         }
@@ -79,7 +79,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.ResponseMessage();
         }
@@ -87,7 +87,7 @@ namespace HttpHelper
         public async Task<ClientCredentials> GetOAuth2ClientCredentialsAsync(string clientId,
             string clientSecret,
             string authUrl,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             var clientCredentials = new ClientCredentials()
             {
@@ -103,7 +103,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.ResponseMessage();
         }
@@ -113,7 +113,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.ResponseMessage();
         }
@@ -122,7 +122,7 @@ namespace HttpHelper
             FormUrlEncodedContent form,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.ResponseMessage();
         }
@@ -132,7 +132,7 @@ namespace HttpHelper
             ContentType contentType = ContentType.None,
             Dictionary<string, string> headers = null,
             bool throwOnBadStatus = false,
-            CancellationTokenSource cancellationToken = null)
+            CancellationToken cancellationToken = default)
         {
             return await this.ResponseMessage();
         }
